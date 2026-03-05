@@ -1,0 +1,40 @@
+framework:
+    messenger:
+        failure_transport: failed
+
+        transports:
+            logs_ingest:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    exchange:
+                        name: logs.ingest
+                        type: direct
+                        default_publish_routing_key: log
+                    queues:
+                        logs.ingest:
+                            binding_keys: ['log']
+                retry_strategy:
+                    max_retries: 3
+                    delay: 1000
+                    multiplier: 2
+
+            failed:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    exchange:
+                        name: logs.failed
+                        type: direct
+                        default_publish_routing_key: failed
+                    queues:
+                        logs.failed:
+                            binding_keys: ['failed']
+
+        routing:
+            'App\Message\LogEntryMessage': logs_ingest
+
+when@test:
+    framework:
+        messenger:
+            transports:
+                logs_ingest: 'in-memory://'
+                failed: 'in-memory://'
