@@ -91,6 +91,4 @@ curl -X POST http://localhost:8080/api/logs/ingest \
 # Запуск всех тестов
 docker exec php php bin/phpunit
 
-## Структура проекта
-
 ```

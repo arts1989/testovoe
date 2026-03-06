@@ -13,7 +13,8 @@ readonly class LogIngestionService
 {
     public function __construct(
         private MessageBusInterface $messageBus,
-    ) {}
+    ) {
+    }
 
     public function process(LogBatchRequest $batch): array
     {
